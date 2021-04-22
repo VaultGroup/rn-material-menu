@@ -7,6 +7,7 @@ import {
   I18nManager,
   Modal,
   Platform,
+  ScrollView,
   StatusBar,
   StyleSheet,
   TouchableWithoutFeedback,
@@ -189,10 +190,10 @@ class Menu extends React.Component {
     const animationStarted = menuState === STATES.ANIMATING;
     const modalVisible = menuState === STATES.SHOWN || animationStarted;
 
-    const { testID, button, style, children } = this.props;
+    const { testID, button, style, dropDownStyle, children } = this.props;
 
     return (
-      <View ref={this._setContainerRef} collapsable={false} testID={testID}>
+      <View ref={this._setContainerRef} collapsable={false} testID={testID} style={style}>
         <View>{button}</View>
 
         <Modal
@@ -214,13 +215,16 @@ class Menu extends React.Component {
                 style={[
                   styles.shadowMenuContainer,
                   shadowMenuContainerStyle,
-                  style,
+                  dropDownStyle,
                 ]}
               >
                 <Animated.View
                   style={[styles.menuContainer, animationStarted && menuSize]}
                 >
-                  {children}
+                  <ScrollView style={{maxHeight: dropDownStyle?.maxHeight && dropDownStyle?.maxHeight < windowHeight ? dropDownStyle?.maxHeight : windowHeight}}>
+                    {children}
+                  </ScrollView>
+
                 </Animated.View>
               </Animated.View>
             </View>
